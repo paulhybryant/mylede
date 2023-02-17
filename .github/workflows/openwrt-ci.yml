@@ -10,6 +10,7 @@ name: OpenWrt-CI
 on:
   schedule:
     - cron: 0 20 * * *
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -43,12 +44,11 @@ jobs:
 
       - name: Update feeds
         run: |
-          sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
       - name: Generate configuration file
-        run: make defconfig
+        run: cp .config.xiaomi .config
 
       - name: Download packages
         run: make download -j16
